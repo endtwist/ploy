@@ -2,7 +2,7 @@ define( [ 'backbone', 'underscore', 'backbone-relational' ], function( Backbone,
 
     var Piece = Backbone.RelationalModel.extend( {
         defaults: {
-            type: 'Shield',
+            name: 'Shield',
             flags: 1,
             range: 1,
 
@@ -76,7 +76,7 @@ define( [ 'backbone', 'underscore', 'backbone-relational' ], function( Backbone,
                 posX = curPos[0],
                 posY = curPos[1],
                 steps = [];
-            for( var i = 0; i < maxStep; i++ ) {
+            for( var i = 0; i <= maxStep - 1; i++ ) {
                 if( posX !== position[0] )
                     posX += stepX;
 
@@ -87,7 +87,9 @@ define( [ 'backbone', 'underscore', 'backbone-relational' ], function( Backbone,
                 if( typeof test === 'function' ) {
                     var result = test( [ posX, posY ] );
 
-                    if( result && i < maxStep - 1 ) {
+                    console.log('test', result)
+
+                    if( result && ( i < maxStep - 1 || result.get( 'player' ) === this.get( 'player' ) ) ) {
                         console.error( 'Piece blocking the way!' );
                         return false;
                     }

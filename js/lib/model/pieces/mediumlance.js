@@ -2,13 +2,15 @@ define( [ 'backbone', 'underscore', 'model/pieces/base' ], function( Backbone, _
 
     var MediumLance = Piece.extend( {
         defaults: {
-            type: 'Medium Lance',
+            name: 'Medium Lance',
             flags: 3,
             range: 3,
 
             flagAngles: [0, 90, 180]
         }
     } );
+
+    _.defaults(MediumLance.prototype.defaults, Piece.prototype.defaults);
 
     return MediumLance;
 

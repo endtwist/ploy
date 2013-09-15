@@ -18,5 +18,9 @@
 		&:nth-child(odd) {
 			background: #afafaf;
 		}
+
+		&.active {
+			background: #ff0000;
+		}
 	}
 }

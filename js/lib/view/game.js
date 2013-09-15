@@ -11,6 +11,8 @@ define( [
         initialize: function() {
             this.model = new GameModel();
             this.board = new Board();
+
+            this.listenTo( this.board, 'move', this.move );
         },
 
         render: function() {
@@ -23,7 +25,9 @@ define( [
         },
 
         move: function( pieceAt, moveTo ) {
-            this.model.playMove( 0, this.model.pieceAtPosition( pieceAt ), moveTo );
+            var piece = this.model.pieceAtPosition( pieceAt );
+
+            this.model.playMove( this.model.get( 'players' ).indexOf( this.model.currentPlayer() ), piece, moveTo );
         },
 
         end: function() {

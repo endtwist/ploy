@@ -2,13 +2,15 @@ define( [ 'backbone', 'underscore', 'model/pieces/base' ], function( Backbone, _
 
     var Commander = Piece.extend( {
         defaults: {
-            type: 'Commander',
+            name: 'Commander',
             flags: 4,
             range: 1,
 
             flagAngles: [0, 90, 180, 270]
         }
     } );
+
+    _.defaults(Commander.prototype.defaults, Piece.prototype.defaults);
 
     return Commander;
 

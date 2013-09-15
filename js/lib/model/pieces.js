@@ -8,10 +8,11 @@ define( [
     'model/pieces/lightlance',
     'model/pieces/mediumlance',
     'model/pieces/heavylance',
-    'model/pieces/commander'
+    'model/pieces/commander',
+    'backbone-relational'
 ],
 function( Base, Shield, LightProbe, MediumProbe, HeavyProbe1, HeavyProbe2, LightLance, MediumLance, HeavyLance, Commander ) {
-    return {
+    var Pieces = {
         Base: Base,
         Shield: Shield,
         LightProbe: LightProbe,
@@ -23,4 +24,11 @@ function( Base, Shield, LightProbe, MediumProbe, HeavyProbe1, HeavyProbe2, Light
         HeavyLance: HeavyLance,
         Commander: Commander
     };
+
+    // haaaack.
+    if( Backbone.Relational.store._modelScopes.indexOf( Pieces ) === -1 ) {
+        Backbone.Relational.store.addModelScope( Pieces );
+    }
+
+    return Pieces;
 } );

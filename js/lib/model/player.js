@@ -44,41 +44,40 @@ define( [
             }
 
             this.listenTo( this.get( 'pieces' ), 'add', function( piece ) {
-                BoardVent.trigger( 'add', piece.get( 'position' ), piece.get( 'type' ) );
+                BoardVent.trigger( 'add', piece.get( 'position' ), piece );
             } );
 
             this.listenTo( this.get( 'pieces' ), 'remove', function( piece ) {
-                BoardVent.trigger( 'remove', piece.get( 'position' ), piece.get( 'type' ) );
+                BoardVent.trigger( 'remove', piece.get( 'position' ), piece );
             } );
 
             this.get( 'pieces' ).add( [
-                new Pieces.Shield( { position: piecePositions[ 0 ], facing: piecesStartFacing } ),
-                new Pieces.Shield( { position: piecePositions[ 1 ], facing: piecesStartFacing } ),
-                new Pieces.Shield( { position: piecePositions[ 2 ], facing: piecesStartFacing } ),
+                { position: piecePositions[ 0 ], facing: piecesStartFacing, type: 'shield' },
+                { position: piecePositions[ 1 ], facing: piecesStartFacing, type: 'shield' },
+                { position: piecePositions[ 2 ], facing: piecesStartFacing, type: 'shield' },
 
-                new Pieces.HeavyProbe1( { position: piecePositions[ 3 ], facing: piecesStartFacing } ),
-                new Pieces.MediumProbe( { position: piecePositions[ 4 ], facing: piecesStartFacing } ),
-                new Pieces.LightProbe(  { position: piecePositions[ 5 ], facing: piecesStartFacing } ),
-                new Pieces.MediumProbe( { position: piecePositions[ 6 ], facing: piecesStartFacing } ),
-                new Pieces.HeavyProbe2( { position: piecePositions[ 7 ], facing: piecesStartFacing } ),
+                { position: piecePositions[ 3 ], facing: piecesStartFacing, type: 'heavyprobe1' },
+                { position: piecePositions[ 4 ], facing: piecesStartFacing, type: 'mediumprobe' },
+                { position: piecePositions[ 5 ], facing: piecesStartFacing, type: 'lightprobe' },
+                { position: piecePositions[ 6 ], facing: piecesStartFacing, type: 'mediumprobe' },
+                { position: piecePositions[ 7 ], facing: piecesStartFacing, type: 'heavyprobe2'},
 
-                new Pieces.MediumLance( { position: piecePositions[ 8 ],  facing: piecesStartFacing } ),
-                new Pieces.LightLance(  { position: piecePositions[ 9 ],  facing: piecesStartFacing } ),
-                new Pieces.HeavyLance(  { position: piecePositions[ 10 ], facing: piecesStartFacing } ),
-                new Pieces.Commander(   { position: piecePositions[ 11 ], facing: piecesStartFacing } ),
-                new Pieces.HeavyLance(  { position: piecePositions[ 12 ], facing: piecesStartFacing } ),
-                new Pieces.LightLance(  { position: piecePositions[ 13 ], facing: piecesStartFacing } ),
-                new Pieces.MediumLance( { position: piecePositions[ 14 ], facing: piecesStartFacing } )
+                { position: piecePositions[ 8 ], facing: piecesStartFacing, type: 'mediumlance' },
+                { position: piecePositions[ 9 ],  facing: piecesStartFacing, type: 'lightlance' },
+                { position: piecePositions[ 10 ], facing: piecesStartFacing, type: 'heavylance' },
+                { position: piecePositions[ 11 ], facing: piecesStartFacing, type: 'commander' },
+                { position: piecePositions[ 12 ], facing: piecesStartFacing, type: 'heavylance' },
+                { position: piecePositions[ 13 ], facing: piecesStartFacing, type: 'lightlance' },
+                { position: piecePositions[ 14 ], facing: piecesStartFacing, type: 'mediumlance' }
             ] );
         },
 
         movePieceTo: function( piece, newPosition, test ) {
-            var piece = this.get( 'pieces' ).get( piece ),
-                oldPosition = piece.get( 'position' ),
+            var oldPosition = piece.get( 'position' ),
                 moveMade = piece.moveTo( newPosition, test );
 
             if( moveMade )
-                BoardVent.trigger( 'move', oldPosition, newPosition, piece.get( 'type' ) );
+                BoardVent.trigger( 'move', oldPosition, newPosition, piece );
 
             return moveMade;
         },

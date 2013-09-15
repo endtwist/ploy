@@ -4,7 +4,8 @@ define( [
     'collection/players',
     'model/pieces',
     'model/player',
-    'vent/board'
+    'vent/board',
+    'backbone-relational'
 ], function( Backbone, _, PlayerCollection, Pieces, Player, BoardVent ) {
 
     var Game = Backbone.RelationalModel.extend( {
@@ -46,7 +47,7 @@ define( [
         },
 
         pieceCaptureEvent: function( player, piece ) {
-            console.log( 'Piece captured!', player.get( 'name' ), piece.get( 'type' ) );
+            console.log( 'Piece captured!', player.get( 'name' ), piece.get( 'name' ) );
 
             if( piece instanceof Pieces.Commander || player.get( 'pieces' ).length === 1 ) {
                 this.set( 'running', false );
@@ -65,12 +66,14 @@ define( [
                 return false;
             }
 
-            if( player === this.get( 'turn' ) ) {
+            console.log( piece, piece.get( 'player' ) );
+
+            if( piece.get( 'player' ) === currentPlayer ) {
                 if( currentPlayer.movePieceTo( piece, move, this.pieceAtPosition ) ) {
                     var capturedPiece = opponent.getPieceAtPosition( move );
 
                     if( capturedPiece ) {
-                        console.log( 'Player ' + currentPlayer.get( 'name' ) + ' captures player ' + opponent.get( 'name' ) + '\'s ' + capturedPiece.get( 'type' ) );
+                        console.log( 'Player ' + currentPlayer.get( 'name' ) + '\'s ' + piece.get( 'name' ) + ' captures player ' + opponent.get( 'name' ) + '\'s ' + capturedPiece.get( 'name' ) );
                         opponent.capturePiece( capturedPiece );
                     }
 

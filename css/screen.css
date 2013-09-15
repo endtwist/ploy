@@ -82,3 +82,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 #board li:nth-child(odd) {
   background: #afafaf;
 }
+/* line 22, ../sass/screen.scss */
+#board li.active {
+  background: #ff0000;
+}
