@@ -4,7 +4,8 @@ define( [
     'collection/players',
     'model/pieces',
     'model/player',
-], function( Backbone, _, PlayerCollection, Pieces, Player ) {
+    'vent/board'
+], function( Backbone, _, PlayerCollection, Pieces, Player, BoardVent ) {
 
     var Game = Backbone.RelationalModel.extend( {
         defaults: {
@@ -26,9 +27,6 @@ define( [
         initialize: function() {
             _.bindAll( this, 'pieceAtPosition' );
 
-            this.get( 'players' ).add( { side: 'bottom' } );
-            this.get( 'players' ).add( { side: 'top' } );
-
             this.set( 'turn', 0 );
 
             this.get( 'players' ).on( 'remove:pieces', _.bind( function( piece, pieces ) {
@@ -40,6 +38,11 @@ define( [
                     console.log( 'Game over! Player ' + player.get( 'name' ) + ' wins!' );
                 }
             }, this ) );
+        },
+
+        start: function() {
+            this.get( 'players' ).add( { side: 'bottom' } );
+            this.get( 'players' ).add( { side: 'top' } );
         },
 
         pieceCaptureEvent: function( player, piece ) {

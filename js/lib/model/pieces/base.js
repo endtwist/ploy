@@ -57,10 +57,10 @@ define( [ 'backbone', 'underscore', 'backbone-relational' ], function( Backbone,
                 return false;
             }
 
-            /*if( dist > this.get( 'range' ) ) {
+            if( dist > this.get( 'range' ) ) {
                 console.error( 'Movement greater than range!' );
                 return false;
-            }*/
+            }
 
             var stepX = 1, stepY = 1; // 0 -> 90
             if( angle >= 90 && angle < 180 ) {

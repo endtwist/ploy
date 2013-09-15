@@ -3,8 +3,9 @@ define( [
     'underscore',
     'model/pieces',
     'collection/pieces',
+    'vent/board',
     'backbone-relational'
-], function( Backbone, _, Pieces, PiecesCollection ) {
+], function( Backbone, _, Pieces, PiecesCollection, BoardVent ) {
 
     var Player = Backbone.RelationalModel.extend( {
         defaults: {
@@ -23,7 +24,7 @@ define( [
         }],
 
         initialize: function( options ) {
-            this.set( 'name', options.name || 'Random Player ' + Math.floor(Math.random() * 10000) );
+            this.set( 'name', options.name || 'Random Player ' + Math.floor( Math.random() * 10000 ) );
 
             // Depending on the side of the board, the pieces need to start facing a either 0° or 180°.
             var piecesStartFacing = 0,
@@ -41,6 +42,14 @@ define( [
                     [7, 8], [6, 8], [5, 8], [4, 8], [3, 8], [2, 8], [1, 8]
                 ];
             }
+
+            this.listenTo( this.get( 'pieces' ), 'add', function( piece ) {
+                BoardVent.trigger( 'add', piece.get( 'position' ), piece.get( 'type' ) );
+            } );
+
+            this.listenTo( this.get( 'pieces' ), 'remove', function( piece ) {
+                BoardVent.trigger( 'remove', piece.get( 'position' ), piece.get( 'type' ) );
+            } );
 
             this.get( 'pieces' ).add( [
                 new Pieces.Shield( { position: piecePositions[ 0 ], facing: piecesStartFacing } ),
@@ -63,8 +72,15 @@ define( [
             ] );
         },
 
-        movePieceTo: function( piece, move, test ) {
-            return this.get( 'pieces' ).get( piece ).moveTo( move, test );
+        movePieceTo: function( piece, newPosition, test ) {
+            var piece = this.get( 'pieces' ).get( piece ),
+                oldPosition = piece.get( 'position' ),
+                moveMade = piece.moveTo( newPosition, test );
+
+            if( moveMade )
+                BoardVent.trigger( 'move', oldPosition, newPosition, piece.get( 'type' ) );
+
+            return moveMade;
         },
 
         getPieceAtPosition: function( position ) {

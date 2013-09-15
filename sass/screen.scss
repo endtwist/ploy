@@ -1,0 +1,22 @@
+@import "compass/reset";
+
+#board {
+	$piece-size: 50px;
+
+	width: $piece-size * 9;
+	height: $piece-size * 9;
+	font-size: 0;
+
+	li {
+		display: block;
+		float: left;
+		width: $piece-size;
+		height: $piece-size;
+		background: #cfcfcf;
+		font-size: 10px;
+
+		&:nth-child(odd) {
+			background: #afafaf;
+		}
+	}
+}
