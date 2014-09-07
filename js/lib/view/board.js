@@ -33,14 +33,14 @@ define( [
 
         drawPiece: function( position, piece ) {
             var square = this.$el.find( '[data-row="' + position[ 0 ] + '"][data-col="' + position[ 1 ] + '"]' ),
-                pieceEl = square.find( '[data-id]' );
+                pieceEl = square.find( '[data-id="' + piece.cid + '"]' );
 
-            if( !pieceEl.length ) {
-                pieceEl = $( '<span data-id="' + piece.cid + '">' + /*piece.get( 'name' )*/'' + '</span>' );
-                square.append( pieceEl );
-            } else {
-                pieceEl.empty();
+            if( pieceEl.length ) {
+                pieceEl.remove();
             }
+
+            pieceEl = $( '<span data-id="' + piece.cid + '">' + /*piece.get( 'name' )*/'' + '</span>' );
+            square.append( pieceEl );
 
             var pieceDims = { w: square.width(), h: square.height() },
                 pieceOrigin = pieceDims.w / 2,
