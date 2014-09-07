@@ -6,7 +6,7 @@ define( [ 'backbone', 'underscore', 'model/pieces/base' ], function( Backbone, _
             flags: 3,
             range: 3,
 
-            flagAngles: [0, 90, 180]
+            flagAngles: [0, 90, 270]
         }
     } );
 
