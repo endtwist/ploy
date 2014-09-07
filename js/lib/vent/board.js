@@ -6,5 +6,5 @@ define( [
     var BoardVent = _.extend( {}, Backbone.Events );
 
     return BoardVent;
-    
+
 } );

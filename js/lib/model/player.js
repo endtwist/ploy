@@ -82,6 +82,11 @@ define( [
             return moveMade;
         },
 
+        rotatePiece: function( piece, rotation ) {
+            piece.rotate( rotation );
+            BoardVent.trigger( 'rotate', rotation, piece );
+        },
+
         getPieceAtPosition: function( position ) {
             var pieces = this.get( 'pieces' ),
                 pieceAtPos;

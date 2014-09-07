@@ -1,4 +1,4 @@
-define( [ 
+define( [
     'model/pieces/base',
     'model/pieces/shield',
     'model/pieces/lightprobe',

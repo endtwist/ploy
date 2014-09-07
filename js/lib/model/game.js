@@ -28,6 +28,7 @@ define( [
         initialize: function() {
             _.bindAll( this, 'pieceAtPosition' );
 
+            this._dirtyRotation = false;
             this.set( 'turn', 0 );
 
             this.get( 'players' ).on( 'remove:pieces', _.bind( function( piece, pieces ) {
@@ -69,7 +70,9 @@ define( [
             console.log( piece, piece.get( 'player' ) );
 
             if( piece.get( 'player' ) === currentPlayer ) {
-                if( currentPlayer.movePieceTo( piece, move, this.pieceAtPosition ) ) {
+                if( this._dirtyRotation ) {
+                    console.error( 'Cannot rotate and move in the same turn!' );
+                } else if( currentPlayer.movePieceTo( piece, move, this.pieceAtPosition ) ) {
                     var capturedPiece = opponent.getPieceAtPosition( move );
 
                     if( capturedPiece ) {
@@ -78,6 +81,26 @@ define( [
                     }
 
                     this.turnPlayed();
+                }
+            } else {
+                console.error( 'It is not ' + this.get( 'players' ).at( player ).get( 'name' ) + '\'s turn!' );
+            }
+        },
+
+        rotatePiece: function( player, piece, rotation, finalize ) {
+            var currentPlayer = this.currentPlayer();
+
+            if( !this.get( 'running' ) ) {
+                console.log( 'Game ended!' );
+                return false;
+            }
+
+            if( piece.get( 'player' ) === currentPlayer ) {
+                if( finalize ) {
+                    this.turnPlayed();
+                } else {
+                    currentPlayer.rotatePiece( piece, rotation );
+                    this._dirtyRotation = ( rotation !== 0 ? true : false );
                 }
             } else {
                 console.error( 'It is not ' + this.get( 'players' ).at( player ).get( 'name' ) + '\'s turn!' );
@@ -97,6 +120,7 @@ define( [
         },
 
         turnPlayed: function() {
+            this._dirtyRotation = false;
             this.set( 'turn', this.get( 'turn' ) == 0 ? 1 : 0 );
         },
 

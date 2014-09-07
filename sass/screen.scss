@@ -22,5 +22,9 @@
 		&.active {
 			background: #ff0000;
 		}
+
+		> span {
+			pointer-events: none;
+		}
 	}
 }

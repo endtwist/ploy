@@ -11,7 +11,7 @@ define( [ 'backbone', 'underscore', 'backbone-relational' ], function( Backbone,
                  *   ||   *
                 *    ||    *  90°
                 *          *
-                 *        * 
+                 *        *
                     *  *
              **/
             flagAngles: [ 0 ],
@@ -46,14 +46,19 @@ define( [ 'backbone', 'underscore', 'backbone-relational' ], function( Backbone,
                 angles = this.get( 'flagAngles' ),
                 facing = this.get( 'facing' );
             for( var i = 0; i < angles.length; i++ ) {
-                if( ( angles[ i ] + facing ) % 360 == angle ) {
+                // 360 + (angles + facing) % 360 ensures that the value is always between 0 and 360
+                if( ( 360 + angles[ i ] + facing ) % 360 == angle ) {
                     matchesAngle = true;
                     break;
                 }
             }
 
             if( !matchesAngle ) {
-                console.error( 'Can\'t move in that direction. Currently facing ' + facing + ' with vectors pointing at ' + angles );
+                var calculatedAngles = [];
+                for( var i = 0; i < angles.length; i++ ) {
+                    calculatedAngles.push( ( angles[ i ] + facing ) % 360 );
+                }
+                console.error( 'Can\'t move in that direction. Currently facing ' + facing + ' with vectors pointing at ' + calculatedAngles );
                 return false;
             }
 
@@ -100,6 +105,19 @@ define( [ 'backbone', 'underscore', 'backbone-relational' ], function( Backbone,
 
             this.set( 'position', position );
             return true;
+        },
+
+        rotate: function( turns ) {
+            // Pieces can rotate only in 45° increments, either direction.
+            this.set( 'facing', this.get( 'facing' ) + ( turns * 45 ) );
+
+            var angles = this.get( 'flagAngles' ),
+                facing = this.get( 'facing' ),
+                calculatedAngles = [];
+            for( var i = 0; i < angles.length; i++ ) {
+                calculatedAngles.push( ( angles[ i ] + facing ) % 360 );
+            }
+            console.log( 'Currently facing ' + facing + ' with vectors pointing at ' + calculatedAngles );
         }
     } );
 

@@ -5,6 +5,7 @@ require.config( {
         'backbone': '../vendor/backbone-min',
         'backbone-relational': '../vendor/backbone-relational',
         'underscore': '../vendor/underscore-min',
+        'raphael': '../vendor/raphael-min',
         'jquery': '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min'
     },
 
