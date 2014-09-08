@@ -1,12 +1,13 @@
 require.config( {
-    baseUrl: 'js/lib',
+    baseUrl: '/js/lib',
 
     paths: {
         'backbone': '../vendor/backbone-min',
         'backbone-relational': '../vendor/backbone-relational',
         'underscore': '../vendor/underscore-min',
         'raphael': '../vendor/raphael-min',
-        'jquery': '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min'
+        'jquery': '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min',
+        'socket.io': '/socket.io/socket.io.js'
     },
 
     shim: {
@@ -33,7 +34,7 @@ requirejs( [
     var PloyRouter = Backbone.Router.extend( {
         routes: {
             '': 'home',
-            'play': 'play'
+            'play/:roomId': 'play'
         },
 
         home: function() {
@@ -41,20 +42,16 @@ requirejs( [
                 this.currentGame.end();
 
             $( '#play' ).off( 'click' ).show().on( 'click', _.bind( function() {
-                this.navigate( '/play', { trigger: true } );
+                this.navigate( '/play/' + Math.floor( Math.random() * 1000 ), { trigger: true } );
                 return false;
             }, this ) );
         },
 
-        play: function() {
+        play: function( roomId ) {
             $( '#play' ).hide();
 
             this.currentGame = new Game();
-            this.currentGame.render();
-
-            setTimeout( _.bind( function() {
-                this.currentGame.move( [3, 2], [3, 3] );
-            }, this ), 2000 );
+            this.currentGame.setRoom( roomId ).render();
         }
     } );
 

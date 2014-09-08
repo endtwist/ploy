@@ -9,9 +9,10 @@ define( [
     'model/pieces/mediumlance',
     'model/pieces/heavylance',
     'model/pieces/commander',
+    'backbone',
     'backbone-relational'
 ],
-function( Base, Shield, LightProbe, MediumProbe, HeavyProbe1, HeavyProbe2, LightLance, MediumLance, HeavyLance, Commander ) {
+function( Base, Shield, LightProbe, MediumProbe, HeavyProbe1, HeavyProbe2, LightLance, MediumLance, HeavyLance, Commander, Backbone ) {
     var Pieces = {
         Base: Base,
         Shield: Shield,

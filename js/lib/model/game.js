@@ -15,7 +15,7 @@ define( [
             winner: null
         },
 
-        relations: [{
+        relations: [ {
             type: Backbone.HasMany,
             key: 'players',
             relatedModel: Player,
@@ -23,7 +23,7 @@ define( [
             reverseRelation: {
                 key: 'game'
             }
-        }],
+        } ],
 
         initialize: function() {
             _.bindAll( this, 'pieceAtPosition' );
@@ -42,9 +42,17 @@ define( [
             }, this ) );
         },
 
-        start: function() {
-            this.get( 'players' ).add( { side: 'bottom' } );
-            this.get( 'players' ).add( { side: 'top' } );
+        start: function( pieces, turn ) {
+            if( !pieces ) {
+                pieces = [ false, false ];
+            }
+
+            this.get( 'players' ).add( { side: 'bottom', pieces: pieces[ 0 ] } );
+            this.get( 'players' ).add( { side: 'top', pieces: pieces[ 1 ] } );
+
+            if( turn ) {
+                this.set( 'turn', turn );
+            }
         },
 
         pieceCaptureEvent: function( player, piece ) {
@@ -59,8 +67,8 @@ define( [
         },
 
         playMove: function( player, piece, move ) {
-            var currentPlayer = this.currentPlayer(),
-                opponent = this.opponentPlayer();
+            var currentPlayer = this.get( 'players' ).at( player ),
+                opponent = this.get( 'players' ).at( player == 0 ? 1 : 0 );
 
             if( !this.get( 'running' ) ) {
                 console.log( 'Game ended!' );
@@ -69,9 +77,10 @@ define( [
 
             console.log( piece, piece.get( 'player' ) );
 
-            if( piece.get( 'player' ) === currentPlayer ) {
+            if( this.get( 'turn' ) === player && piece.get( 'player' ) === currentPlayer ) {
                 if( this._dirtyRotation ) {
                     console.error( 'Cannot rotate and move in the same turn!' );
+                    return false;
                 } else if( currentPlayer.movePieceTo( piece, move, this.pieceAtPosition ) ) {
                     var capturedPiece = opponent.getPieceAtPosition( move );
 
@@ -81,29 +90,34 @@ define( [
                     }
 
                     this.turnPlayed();
+                    return true;
                 }
             } else {
                 console.error( 'It is not ' + this.get( 'players' ).at( player ).get( 'name' ) + '\'s turn!' );
+                return false;
             }
         },
 
         rotatePiece: function( player, piece, rotation, finalize ) {
-            var currentPlayer = this.currentPlayer();
+            var currentPlayer = this.get( 'players' ).at( player );
 
             if( !this.get( 'running' ) ) {
                 console.log( 'Game ended!' );
                 return false;
             }
 
-            if( piece.get( 'player' ) === currentPlayer ) {
+            if( this.get( 'turn' ) === player && piece.get( 'player' ) === currentPlayer ) {
                 if( finalize ) {
                     this.turnPlayed();
                 } else {
                     currentPlayer.rotatePiece( piece, rotation );
                     this._dirtyRotation = ( rotation !== 0 ? true : false );
                 }
+
+                return true;
             } else {
                 console.error( 'It is not ' + this.get( 'players' ).at( player ).get( 'name' ) + '\'s turn!' );
+                return false;
             }
         },
 
@@ -122,6 +136,15 @@ define( [
         turnPlayed: function() {
             this._dirtyRotation = false;
             this.set( 'turn', this.get( 'turn' ) == 0 ? 1 : 0 );
+        },
+
+        toJSON: function() {
+            return {
+                pieces: this.get( 'players' ).map( function( player ) {
+                        return player.getPieces().toJSON();
+                    } ),
+                turn: this.get( 'turn' )
+            };
         },
 
         currentPlayer: function() {

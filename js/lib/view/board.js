@@ -60,8 +60,7 @@ define( [
             } );
         },
 
-        drawRotatedPiece: function( rotation, piece ) {
-            var position = [ this.$selectedSquare.data( 'row' ), this.$selectedSquare.data( 'col' ) ];
+        drawRotatedPiece: function( position, rotation, piece ) {
             this.drawPiece( position, piece );
         },
 

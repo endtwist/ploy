@@ -118,6 +118,14 @@ define( [ 'backbone', 'underscore', 'backbone-relational' ], function( Backbone,
                 calculatedAngles.push( ( angles[ i ] + facing ) % 360 );
             }
             console.log( 'Currently facing ' + facing + ' with vectors pointing at ' + calculatedAngles );
+        },
+
+        toJSON: function() {
+            return {
+                position: this.get( 'position' ),
+                facing: this.get( 'facing' ),
+                type: this.get( 'type' )
+            }
         }
     } );
 
